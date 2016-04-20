@@ -5,18 +5,21 @@ import java.util.Vector;
 public class BSTNode{
     private BSTNode left = null, right = null, parent = null;
     private int level; 
-    protected int key;  
+    protected int key; 
+    public int phiAdd;
  
  // statistics
-    public int size = 1, height = 1, sumh = 1;   
+    public int size = 0, height = 0, sumh = 0;   
     public int hsx = 0, hdx = 0, delta = 0;
 
     public BSTNode(BSTNode x) {
         this.key = x.getKey();
+        this.phiAdd = key;
     }
     
     public BSTNode(int k) {
         this.key = k;
+        this.phiAdd = key;
     }
         
     public int getKey() {
@@ -129,7 +132,8 @@ public class BSTNode{
      * removes edge between this and right
      */
     public void unlinkRight() {
-        getRight().setParent(null);
+        if(getRight().parent != null)
+            getRight().setParent(null);
         setRight(null);
     }
 
@@ -146,30 +150,26 @@ public class BSTNode{
      * that this was already calculated for its children.
      */
     public void calc() {
-        int ls = 0, rs = 0, lh = 0, rh = 0, lsh = 0, rsh = 0;
+        int lh = 0, rh = 0;
         if (getLeft() != null) {
-            ls = getLeft().size;
             lh = getLeft().height;
-            lsh = getLeft().sumh;
-            hsx = Math.max(getLeft().hsx, getLeft().hdx) + 1;
+            hsx = getLeft().height +1;
         }
         if (getRight() != null) {
-            rs = getRight().size;
-            rh = getRight().height;
-            rsh = getRight().sumh;
-            hdx = Math.max(getRight().hsx, getRight().hdx) + 1;
-                  
+            hdx = getRight().height +1;
+            rh = getRight().height;             
         }
-        size = ls + rs + 1;
-        height = Math.max(lh, rh) + 1;
-        sumh = lsh + rsh + size;
-        if (hdx > hsx)
-            delta = hdx - hsx;
-        if (hsx > hdx)
-            delta = hsx - hdx;
-        if (hsx == hdx)
-            delta = 0;
-            
+
+        if(getRight() == null && getLeft() == null)
+        { 
+         height = 0;
+         hdx = 0;
+         hsx = 0;
+        }
+        else
+            height = Math.max(lh, rh) + 1;
+
+        
     }
 
     /**
@@ -197,6 +197,19 @@ public class BSTNode{
         Vector<BSTNode> acc = new Vector<BSTNode>();
         this._postorder(acc);
         return acc;
+    }
+
+    public int numSons()
+    {
+        if(this.getLeft() != null && this.getRight() != null)
+            return 2;
+        
+        else if(this.getLeft() == null && this.getRight() != null)
+                return 1;
+        else if(this.getLeft() != null && this.getRight() == null)
+                return 1;
+      
+        return 0;
     }
 
 

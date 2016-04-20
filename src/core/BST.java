@@ -1,5 +1,7 @@
 package core;
 
+import java.io.IOException;
+
 import core.BSTNode;
 
 public class BST {
@@ -18,7 +20,7 @@ public class BST {
         new BSTInsert(this, new BSTNode(x));
     }
 
-    public String access(BST t, int numnode, int key, int level) {
+    public AccessResult access(BST t, int numnode, int key, int level) throws IOException {
         BSTAccess acc = new BSTAccess();
         return acc.BSTAccessRun(t, numnode, key, level);
     }
@@ -48,7 +50,8 @@ public class BST {
         final BSTNode u = v.getParent();
         if (v.getLeft() == null) {
             u.unlinkRight();
-        } else {
+        }
+         else {
             u.linkRight(v.getLeft());
         }
         if (u.isRoot()) {
@@ -81,6 +84,5 @@ public class BST {
         }
         v.linkRight(u);
     }
-    
     
 }

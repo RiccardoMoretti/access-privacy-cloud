@@ -9,6 +9,7 @@ public class BSTInsert {
         this.T = T;
         this.v = v;
         K = v.getKey();
+        v.height = 0;
     }
 
     
