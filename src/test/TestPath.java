@@ -11,11 +11,11 @@ import core.AccessSequence;
 
 public class TestPath{
 
-    private final static int NUMACCESS  = 5000000;
+    private final static int NUMACCESS  = 1000000;
     private final static int NUMNODE  = 128;
     
-    //diverse modalità di esecuzione (random, self80-20, ecc)
-    private final static int NUMVARIOUSSEQUENCE = 2;
+    //diverse modalità di esecuzione (random, self80-20, self90-10, ecc)
+    private final static int NUMVARIOUSSEQUENCE = 3;
     
     private final static int KLIVELLI = 2;
 
@@ -33,7 +33,7 @@ public class TestPath{
         //utili per grafici e per plottaggio risultati    
         String[] path = new String[NUMACCESS];
     
-    //per diversi posizionamenti root    
+ //   //per diversi posizionamenti root    
     for(int kliv = 0; kliv < KLIVELLI; kliv++)
      {        
        //per ogni tipo di sequenza di accesso (casuale, molto self similare, self similare, ecc)        

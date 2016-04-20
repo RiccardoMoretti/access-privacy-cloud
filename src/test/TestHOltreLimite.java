@@ -63,14 +63,17 @@ public class TestHOltreLimite{
             seqAccess = access.generateSequence(1);
             
             for (int i = 0; i < NUMACCESS; i++) { 
-                                             
-                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], kliv);
                 
-                //memorizzo altezza 
+              //memorizzo altezza 
                 height[i] = Integer.toString(T.getRoot().height);
                 
                 if(Integer.parseInt(height[i]) > 2*(int) Math.ceil(Math.log(NUMNODE) / Math.log(2)))
-                    suph++;                        
+                    suph++;  
+                
+                
+                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], kliv);
+                
+                                      
             }
              
             numvolte[nrun] =  suph;

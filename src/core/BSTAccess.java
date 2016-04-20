@@ -619,8 +619,12 @@ public AccessResult BSTAccessRun(BST T, int numberOfNode, int key, int level) th
     if(skip)
     {   
         //se mi sono comportato male, ripristino l'albero come prima dell'accesso e lo ruoto (per far cambiare un po le cose)
-        T = B;       
-        T = balanceTree(T, localNode,(int) numBlock, K);
+        T = B;      
+        
+           T = balanceTree(T, localNode,(int) numBlock, K);
+           T.getRoot().calcTree();
+ 
+               
      /*   
         String filenameh= "C:/Users/Riccardo Moretti/Desktop/test/ConteggioCasiNonOK.txt";
         FileWriter fwh = new FileWriter(filenameh,true); 

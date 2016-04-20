@@ -11,11 +11,11 @@ import core.AccessSequence;
 
 public class TestAltezza{
 
-    private final static int NUMACCESS  = 2500;
+    private final static int NUMACCESS  = 500000;
     private final static int NUMNODE  = 256;
     
-    //diverse modalità di esecuzione (random, self80-20, ecc)
-    private final static int NUMVARIOUSSEQUENCE = 2;
+    //diverse modalità di esecuzione (random, self80-20, self90-10, ecc)
+    private final static int NUMVARIOUSSEQUENCE = 3;
     
     //primi k livelli dell'albero in cui può essere spostato il target
     //private final static int KLIVELLI =  (int) Math.ceil(Math.log(NUMNODE) / Math.log(2))/2;
@@ -39,8 +39,8 @@ public class TestAltezza{
         for(int j = 0; j < NUMVARIOUSSEQUENCE; ++j)
          {  
     //per diversi posizionamenti root    
-    for(int kliv = 0; kliv < KLIVELLI; kliv++)
-     {            
+   // for(int kliv = 0; kliv < KLIVELLI; kliv++)
+     //{            
             //creazione dell'albero binario di ricerca contenente i dati 
             BST T = new BST();
             
@@ -56,21 +56,26 @@ public class TestAltezza{
             
             for (int i = 0; i < NUMACCESS; i++) { 
                                              
-                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], kliv);
+              //memorizzo altezza 
+                if(T.getRoot().height > 2* Math.ceil(Math.log(NUMNODE) / Math.log(2)))
+                    height[i] = Integer.toString(2* (int) Math.ceil(Math.log(NUMNODE) / Math.log(2)));
+                else
+                    height[i] = Integer.toString(T.getRoot().height);
                 
-                //memorizzo altezza 
-                height[i] = Integer.toString(T.getRoot().height);
-                       
+                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], 1);
+                
+                
+                   
             }
             
             for ( int z = 0 ; z < NUMACCESS ; z++ ) {                     
-                String filenameh= "C:/Users/Riccardo Moretti/Desktop/test/Altezze"+"Parameto0"+j+"K"+kliv+".txt";
+                String filenameh= "C:/Users/Riccardo Moretti/Desktop/test/Altezze"+"Parameto0"+j+"K"+1+".txt";
                 FileWriter fwh = new FileWriter(filenameh,true); 
                 fwh.write(System.lineSeparator()+height[z]);
                 fwh.close();                        
             }            
          }    
-      }
+    //  }
   }       
  
 
