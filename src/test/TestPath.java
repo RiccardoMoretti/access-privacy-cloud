@@ -11,8 +11,8 @@ import core.AccessSequence;
 
 public class TestPath{
 
-    private final static int NUMACCESS  = 1000000;
-    private final static int NUMNODE  = 128;
+    private final static int NUMACCESS  = 10000000;
+    private final static int NUMNODE  = 32;
     
     //diverse modalità di esecuzione (random, self80-20, self90-10, ecc)
     private final static int NUMVARIOUSSEQUENCE = 3;
@@ -34,8 +34,8 @@ public class TestPath{
         String[] path = new String[NUMACCESS];
     
  //   //per diversi posizionamenti root    
-    for(int kliv = 0; kliv < KLIVELLI; kliv++)
-     {        
+   // for(int kliv = 0; kliv < KLIVELLI; kliv++)
+    // {        
        //per ogni tipo di sequenza di accesso (casuale, molto self similare, self similare, ecc)        
       for (int j = 0; j < NUMVARIOUSSEQUENCE; ++j) 
         {          
@@ -49,12 +49,12 @@ public class TestPath{
                                 
             T.getRoot().calcTree(); 
             
-            //generazione sequenza d'accesso in base al parametro (rand, 80-20, ecc)            
+            //generazione sequenza d'accesso in base al parametro (rand, 90-10, 80-20, ecc)            
             seqAccess = access.generateSequence(j);
             
              for (int i = 0; i < NUMACCESS; i++) { 
               
-                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], kliv); 
+                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], 1); 
                                 
                 //memorizzo path percorso
                 path[i] = accres.path;                
@@ -99,13 +99,13 @@ public class TestPath{
       
             //stampo su file i risultati ottenuti           
             for ( int f = 0; f < numPath; f++ ){
-                String filenamep= "C:/Users/Riccardo Moretti/Desktop/test/Path"+"Parameto0"+j+"K"+kliv+".txt";
+                String filenamep= "C:/Users/Riccardo Moretti/Desktop/test/Path"+"Parameto0"+j+"K"+1+".txt";
                 FileWriter fwp = new FileWriter(filenamep,true); 
                 fwp.write(System.lineSeparator()+allPath[f]+"\t"+contPath[f]);
                 fwp.close();          
             }               
         }
-     }
+     //}
  } 
     
     public static void shuffleArray(int[] ar)

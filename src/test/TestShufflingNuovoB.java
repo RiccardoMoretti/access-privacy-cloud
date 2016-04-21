@@ -96,7 +96,7 @@ public class TestShufflingNuovoB{
                                           
             //stampo su file i risultati ottenuti  
              for ( int r = 0; r < NUMNODE; r++ ){
-                String filenameb= "C:/Users/Riccardo Moretti/Desktop/test/ShufflingLogicoFisicoParameto0"+j+"K"+kliv+".txt";
+                String filenameb= "C:/Users/Riccardo Moretti/Desktop/test/NOKNUTHSISCAMBIOShufflingLogicoFisicoParameto0"+j+"K"+kliv+".txt";
                 FileWriter fwb = new FileWriter(filenameb,true); 
                 fwb.write(System.lineSeparator()+r+"\t"+target[r]+"\t"+logical[r]+"\t"+phisical[r]);
                 fwb.close();          

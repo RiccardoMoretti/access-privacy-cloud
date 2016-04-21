@@ -652,7 +652,7 @@ public AccessResult BSTAccessRun(BST T, int numberOfNode, int key, int level) th
             for (int i = 0; i < numBlock; ++i)
                 if(node.key == localNode[i].key)
                     node.phiAdd = tempPhi[i];
-        }
+        } 
    
    }
         
@@ -921,12 +921,14 @@ private BST moveUpTarget(BST T, BSTNode target, int level)
     //se level è = 1 ruoto il target fino a quando non raggiunge la posizione di root    
     if(level == 1)
         while(!(target.isRoot()))
-                 T.rotate(target); 
+                 T.rotate(target);
+                 //T.rotateBIS(target); 
     
     //altrimenti ruoto il target fino a quando non raggiunge il level-esimo livello
     else 
       for( int i = 0; i < (nodeToTarget-level); i++) 
-         T.rotate(target);       
+         T.rotate(target); 
+         // T.rotateBIS(target); 
     
     return T;
     
@@ -978,12 +980,14 @@ private BST balanceTree(BST T, BSTNode[] local, int numBlock, int k)
           hold = papa.height;
             
           T.rotate(node);
+          //T.rotateBIS(node);
           T.getRoot().calcTree();
      
           hnew = node.height;
      
           if(hnew > hold)
           {
+              //T.rotateBIS(papa); 
              T.rotate(papa);
              T.getRoot().calcTree();
           }                     
@@ -994,8 +998,10 @@ private BST balanceTree(BST T, BSTNode[] local, int numBlock, int k)
       {
           if(node.hdx > node.hsx)
               T.rotate(node.getRight());
+              //T.rotateBIS(node.getRight());
           else if(node.hsx > node.hdx)
               T.rotate(node.getLeft()); 
+              //T.rotateBIS(node.getLeft()); 
           
           T.getRoot().calcTree();
       }

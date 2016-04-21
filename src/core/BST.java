@@ -46,6 +46,29 @@ public class BST {
         v.calc();
     }
     
+    public void rotateBIS(BSTNode v) {
+
+      //  System.out.println(v.phiAdd+"\t"+v.getParent().phiAdd);
+        int temp = v.phiAdd;
+        v.phiAdd = v.getParent().phiAdd;
+        v.getParent().phiAdd = temp;
+       // System.out.println(v.phiAdd+"\t"+v.getParent().phiAdd);
+       // System.out.println();
+        
+        if (v.isLeft()) {
+            rightrot(v);
+        } else {
+            leftrot(v);
+        }
+        if (v.getLeft() != null) {
+            v.getLeft().calc();
+                    }
+        if (v.getRight() != null) {
+            v.getRight().calc();
+        }
+        v.calc();
+    }
+    
     protected void leftrot(BSTNode v) {
         final BSTNode u = v.getParent();
         if (v.getLeft() == null) {
