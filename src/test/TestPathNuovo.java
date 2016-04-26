@@ -8,21 +8,18 @@ import core.BSTInsert;
 import core.BSTNode;
 import core.BST;
 import core.AccessSequence;
+import core.PathComuni;
 
-public class TestHOltreLimite{
+public class TestPathNuovo{
 
-    private final static int NUMACCESS  = 100000;
+    private final static int NUMACCESS  = 500000;
     private final static int NUMNODE  = 256;
     
-    //diverse modalità di esecuzione (random, self80-20, ecc)
+    //diverse modalità di esecuzione (random, self80-20, self90-10, ecc)
     private final static int NUMVARIOUSSEQUENCE = 3;
     
-    //primi k livelli dell'albero in cui può essere spostato il target
-    //private final static int KLIVELLI =  (int) Math.ceil(Math.log(NUMNODE) / Math.log(2))/2;
     private final static int KLIVELLI = 2;
-    
-    private final static int NUMRUN = 100;
-    
+
     public static void main(String[] args) throws Exception {
                 
         //valori di chiave presenti nell'albero
@@ -30,26 +27,33 @@ public class TestHOltreLimite{
    
         //sequenza dei valori di chiave acceduti 
         int[] seqAccess = new int[NUMACCESS]; 
-                               
+                                       
         //utile per generare sequenze di accessi, casuali, self-similari, ecc
         AccessSequence access = new AccessSequence(NUMNODE, NUMACCESS);
         
         //utili per grafici e per plottaggio risultati    
-        String[] height = new String[NUMACCESS];
-        
-        double[] numvolte = new double[NUMRUN];
-        double[] perc = new double[NUMRUN];
-        double suph = 0;
-        
-      //per ogni tipo di sequenza di accesso (casuale, molto self similare, self similare, ecc)        
-       for (int j = 0; j < NUMVARIOUSSEQUENCE; ++j) 
-       {   
-      //per diversi posizionamenti root    
-        for(int nrun = 0; nrun < NUMRUN; nrun++)
-          {   
-            suph = 0;    
-        
-    //creazione dell'albero binario di ricerca contenente i dati 
+        String[] path = new String[NUMACCESS];
+
+ //   //per diversi posizionamenti root    
+    for(int kliv = 0; kliv < KLIVELLI; kliv++)
+     {        
+       //per ogni tipo di sequenza di accesso (casuale, molto self similare, self similare, ecc)        
+      for (int j = 0; j < NUMVARIOUSSEQUENCE; ++j) 
+        {     
+          
+          //variabili utili per il test proposto                     
+          int[] contkey = new int[NUMNODE];
+          
+          double[] media = new double[NUMNODE];
+          
+          PathComuni[] aux = new PathComuni[NUMACCESS];
+          
+          for (int i = 0; i < NUMACCESS; i++)
+              aux[i] = new PathComuni();               
+
+          int[] commonBit = new int[NUMNODE];
+
+          //creazione dell'albero binario di ricerca contenente i dati 
             BST T = new BST();
             
             key = balancedTree(NUMNODE);
@@ -58,41 +62,55 @@ public class TestHOltreLimite{
                   new BSTInsert(T, new BSTNode(key[i])).insert();
                                 
             T.getRoot().calcTree(); 
-                                                                      
-            //generazione sequenza d'accesso in base al parametro (rand, 80-20, ecc)            
+            
+            //generazione sequenza d'accesso in base al parametro (rand, 90-10, 80-20, ecc)            
             seqAccess = access.generateSequence(j);
             
-            for (int i = 0; i < NUMACCESS; i++) { 
-                
-              //memorizzo altezza 
-                height[i] = Integer.toString(T.getRoot().height);
-                
-                if(Integer.parseInt(height[i]) > 2*(int) Math.ceil(Math.log(NUMNODE) / Math.log(2)))
-                    suph++;  
-                
-                
-                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], 1);
-                
-                                      
-            }
-             
-            numvolte[nrun] =  suph;
-            perc[nrun] = ((suph/NUMACCESS) * 100);
+             for (int i = 0; i < NUMACCESS; i++) { 
+              
+                AccessResult accres = T.access(T, NUMNODE, seqAccess[i], 1); 
+                                
+                aux[i].target = seqAccess[i];
+                aux[i].path = accres.path;                
+             }
             
-            } 
-        
-        for (int i = 0; i < NUMRUN; i++) {
-            String filenamep= "C:/Users/Riccardo Moretti/Desktop/test/AltezzeOltreLimiteParametro0"+j+"K1.txt";
-            FileWriter fwp = new FileWriter(filenamep,true); 
-            fwp.write(System.lineSeparator()+numvolte[i]+"\t"+perc[i]);
-            fwp.close();
-            }
-        
+             //per tutte le coppie con lo stesso target conto i primi bit in comune
+             for (int i = 0; i < NUMACCESS; i++)
+                for (int q = i+1; q < NUMACCESS; q++)
+                    if(aux[i].target == aux[q].target)
+                     {           
+                         int nbit = 0;
+                         
+                         //se i due cammini sono relativi allo stesso target 
+                         for(int l = 0; l < Math.min(aux[i].path.length(), aux[q].path.length()) ; l++)
+                         {
+                             if(aux[i].path.charAt(l) == aux[q].path.charAt(l))
+                                 nbit++;           
+                         }  
+                         
+                         commonBit[aux[i].target] = commonBit[aux[i].target] +  nbit; 
+                         contkey[aux[i].target]++;                                 
+                     }
+            
+             
+             //per ogni target possibile calcolo la media
+             for (int i = 0; i < NUMNODE; i++)
+             {                 
+                 media[i] = (double) commonBit[i]/(double) contkey[i];
+             }
+                                
+            
+            //stampo su file i risultati ottenuti           
+            for ( int f = 0; f < NUMNODE; f++ ){
+                String filenamep= "C:/Users/Riccardo Moretti/Desktop/test/MediaBitComune"+"Parameto0"+j+"K"+kliv+".txt";
+                FileWriter fwp = new FileWriter(filenamep,true); 
+                fwp.write(System.lineSeparator()+f+"\t"+media[f]);
+                fwp.close();          
+            }               
         }
-        
-
- }
-
+     }
+ } 
+    
     public static void shuffleArray(int[] ar)
     {
       Random rnd = new Random();
